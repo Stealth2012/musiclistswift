@@ -18,11 +18,14 @@ class MainViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //preparing Core Data stuff
+        
         managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
         
         let fetchRequest = NSFetchRequest()
         let entityDescription = NSEntityDescription.entityForName("Track", inManagedObjectContext: self.managedObjectContext)
         
+        //sorting by id
         let idSortDescriptor = NSSortDescriptor(key: "id", ascending: true)
         
         fetchRequest.entity = entityDescription
@@ -32,6 +35,7 @@ class MainViewController: UITableViewController {
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: "Music")
         fetchRequest.returnsObjectsAsFaults = false
+        
         do {
             try fetchedResultsController?.performFetch()
         }
@@ -60,7 +64,8 @@ class MainViewController: UITableViewController {
         let track = fetchedResultsController?.objectAtIndexPath(indexPath) as! Track
         cell.textLabel?.text = track.title
         cell.detailTextLabel?.text = track.artist
-
+        
+        //adding some padding to default imageview
         cell.imageView?.transform = CGAffineTransformMakeScale(0.12, 0.12)
         
         cell.imageView?.image = track.getCoverImage()
