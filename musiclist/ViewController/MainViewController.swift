@@ -59,16 +59,10 @@ class MainViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("TrackCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("TrackCell", forIndexPath: indexPath) as! TrackCell
         
         let track = fetchedResultsController?.objectAtIndexPath(indexPath) as! Track
-        cell.textLabel?.text = track.title
-        cell.detailTextLabel?.text = track.artist
-        
-        //adding some padding to default imageview
-        cell.imageView?.transform = CGAffineTransformMakeScale(0.12, 0.12)
-        
-        cell.imageView?.image = track.getCoverImage()
+        cell.track = track
 
         return cell
     }

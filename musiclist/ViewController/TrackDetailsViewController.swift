@@ -27,14 +27,26 @@ class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var headerView: UIView!
     
+    
+    @IBOutlet weak var navbarTitleLabel: UILabel!
+    
+    @IBOutlet weak var navbarArtistLabel: UILabel!
+    
+    @IBOutlet weak var overviewTitleLabel: UILabel!
+    
     var track: Track?
     
     override func viewDidLoad() {
         
         scrollView.delegate = self
         
+        navbarTitleLabel.text = track?.title
+        navbarArtistLabel.text = track?.artist
+        
         titleLabel.text = track?.title
         artistLabel.text = track?.artist
+        
+        overviewTitleLabel.setKerning(1)
         
         if let path = NSBundle.mainBundle().pathForResource("description", ofType: "txt")
         {
@@ -58,7 +70,7 @@ class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
     func applyTheme(image: UIImage) {
         let colors = NSArray(ofColorsFromImage: image, withFlatScheme: true)
         
-        if colors.count > 0 {
+        if colors.count > 1 {
             var bgColor = colors[0] as! UIColor
             var fgColor = colors[1] as! UIColor
             
@@ -66,11 +78,11 @@ class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
             
             //color correction (depending on light or dark content)
             if statusBarStyle == .LightContent {
-                bgColor = bgColor.darkenByPercentage(0.85)
+                bgColor = bgColor.darkenByPercentage(0.25)
                 fgColor = fgColor.lightenByPercentage(0.85)
             }
             else {
-                bgColor = bgColor.lightenByPercentage(0.85)
+                bgColor = bgColor.lightenByPercentage(0.25)
                 fgColor = fgColor.darkenByPercentage(0.85)
             }
             
@@ -79,8 +91,13 @@ class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
             headerView.backgroundColor = bgColor
             descriptionLabel.textColor = fgColor
             
+            navbarTitleLabel.textColor = fgColor
+            navbarArtistLabel.textColor = fgColor
+            
             titleLabel.textColor = fgColor
             artistLabel.textColor = fgColor
+            
+            overviewTitleLabel.textColor = fgColor
             
             navigationController?.navigationBar.tintColor = fgColor
             
@@ -95,7 +112,6 @@ class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
         navigationController?.navigationBar.shadowImage = UIImage()
         
         titleView.hidden = true
-        headerView.frame = CGRect(x: 0, y: 0, width: self.navigationController!.navigationBar.frame.width, height: self.navigationController!.navigationBar.frame.origin.y + self.navigationController!.navigationBar.frame.size.height)
         
     }
     
@@ -121,7 +137,6 @@ class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
         if scrollView.contentOffset.y < coverImageView.frame.height {
             titleView.alpha = max(0, (-coverImageView.frame.height / 1.2 + scrollView.contentOffset.y) / coverImageView.frame.height * 4)
             coverImageView.alpha = 1 - max(0, (-coverImageView.frame.height / 2 + scrollView.contentOffset.y) / coverImageView.frame.height * 2)
-  
         }
         else {
             titleView.alpha = 1
@@ -129,6 +144,9 @@ class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
         }
         
         headerView.alpha = titleView.alpha
+        
+        titleLabel.alpha = coverImageView.alpha
+        artistLabel.alpha = coverImageView.alpha
     }
     
     //private func taken from ChameleonFramework
