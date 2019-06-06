@@ -5,5 +5,5 @@ This app uses **Core Data** to access data from prepared SQLite database. Album 
 <br><br>
 <img src="http://i.imgur.com/Fbvpe8Q.png" width="200"> <img src="http://i.imgur.com/tvYAcUr.png" width="200"> <img src="http://i.imgur.com/w0mYd9k.png" width="200">
 
-##License
+## License
 The source code is licensed under the [Apache License](LICENSE.txt).
