@@ -11,28 +11,18 @@ import UIKit
 import CoreData
 import ChameleonFramework
 
-class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
+class TrackDetailsViewController : UIViewController {
+    @IBOutlet private weak var coverImageView: UIImageView!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var artistLabel: UILabel!
+    @IBOutlet private weak var descriptionLabel: UILabel!
+    @IBOutlet private weak var titleView: UIView!
+    @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var headerView: UIView!
     
-    @IBOutlet weak var coverImageView: UIImageView!
-
-    @IBOutlet weak var titleLabel: UILabel!
-    
-    @IBOutlet weak var artistLabel: UILabel!
-    
-    @IBOutlet weak var descriptionLabel: UILabel!
-    
-    @IBOutlet weak var titleView: UIView!
-    
-    @IBOutlet weak var scrollView: UIScrollView!
-    
-    @IBOutlet weak var headerView: UIView!
-    
-    
-    @IBOutlet weak var navbarTitleLabel: UILabel!
-    
-    @IBOutlet weak var navbarArtistLabel: UILabel!
-    
-    @IBOutlet weak var overviewTitleLabel: UILabel!
+    @IBOutlet private weak var navbarTitleLabel: UILabel!
+    @IBOutlet private weak var navbarArtistLabel: UILabel!
+    @IBOutlet private weak var overviewTitleLabel: UILabel!
     
     private var statusBarStyle: UIStatusBarStyle = .default {
         didSet {
@@ -47,6 +37,7 @@ class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         
         scrollView.delegate = self
         
@@ -77,53 +68,19 @@ class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
         }
     }
     
-    func applyTheme(image: UIImage) {
-        let colors = NSArray(ofColorsFrom: image, withFlatScheme: true)
-        
-        if colors?.count ?? 0 > 1 {
-            var bgColor = colors?[0] as! UIColor
-            var fgColor = colors?[1] as! UIColor
-            
-            let statusBarStyle = contrastingStatusBarStyleForColor(backgroundColor: bgColor)
-            
-            //color correction (depending on light or dark content)
-            if statusBarStyle == .lightContent {
-                bgColor = bgColor.darken(byPercentage: 0.25) ?? .white
-                fgColor = fgColor.lighten(byPercentage: 0.85) ?? .black
-            }
-            else {
-                bgColor = bgColor.lighten(byPercentage: 0.25) ?? .black
-                fgColor = fgColor.darken(byPercentage: 0.85) ?? .white
-            }
-            
-            self.view.backgroundColor = bgColor
-            headerView.backgroundColor = bgColor
-            descriptionLabel.textColor = fgColor
-            
-            navbarTitleLabel.textColor = fgColor
-            navbarArtistLabel.textColor = fgColor
-            
-            titleLabel.textColor = fgColor
-            artistLabel.textColor = fgColor
-            
-            overviewTitleLabel.textColor = fgColor
-            
-            navigationController?.navigationBar.tintColor = fgColor
-            
-            self.statusBarStyle = statusBarStyle
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.shadowImage = UIImage()
         
         titleView.isHidden = true
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
 
@@ -132,6 +89,7 @@ class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
         titleView.isHidden = false
         titleView.alpha = 0
@@ -139,28 +97,44 @@ class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
         headerView.alpha = 0
     }
     
-    //MARK: UIScrollViewDelegate
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    private func applyTheme(image: UIImage) {
+        let colors = ColorsFromImage(image, withFlatScheme: true)
+        guard colors.count > 1 else { return }
         
-        //change alpha of elements depending on scroll position
+        var bgColor = colors[0]
+        var fgColor = colors[1]
         
-        if scrollView.contentOffset.y < coverImageView.frame.height {
-            titleView.alpha = max(0, (-coverImageView.frame.height / 1.2 + scrollView.contentOffset.y) / coverImageView.frame.height * 4)
-            coverImageView.alpha = 1 - max(0, (-coverImageView.frame.height / 2 + scrollView.contentOffset.y) / coverImageView.frame.height * 2)
+        let statusBarStyle = contrastingStatusBarStyleForColor(backgroundColor: bgColor)
+        
+        //color correction (depending on light or dark content)
+        if statusBarStyle == .lightContent {
+            bgColor = bgColor.darken(byPercentage: 0.25) ?? .white
+            fgColor = fgColor.lighten(byPercentage: 0.85) ?? .black
         }
         else {
-            titleView.alpha = 1
-            coverImageView.alpha = 0
+            bgColor = bgColor.lighten(byPercentage: 0.25) ?? .black
+            fgColor = fgColor.darken(byPercentage: 0.85) ?? .white
         }
         
-        headerView.alpha = titleView.alpha
+        view.backgroundColor = bgColor
+        headerView.backgroundColor = bgColor
+        descriptionLabel.textColor = fgColor
         
-        titleLabel.alpha = coverImageView.alpha
-        artistLabel.alpha = coverImageView.alpha
+        navbarTitleLabel.textColor = fgColor
+        navbarArtistLabel.textColor = fgColor
+        
+        titleLabel.textColor = fgColor
+        artistLabel.textColor = fgColor
+        
+        overviewTitleLabel.textColor = fgColor
+        
+        navigationController?.navigationBar.tintColor = fgColor
+        
+        self.statusBarStyle = statusBarStyle
     }
-    
+
     //private func taken from ChameleonFramework
-    func contrastingStatusBarStyleForColor(backgroundColor: UIColor) -> UIStatusBarStyle {
+    private func contrastingStatusBarStyleForColor(backgroundColor: UIColor) -> UIStatusBarStyle {
     
         //Calculate Luminance
         var luminance: CGFloat
@@ -178,5 +152,25 @@ class TrackDetailsViewController : UIViewController, UIScrollViewDelegate {
         luminance = red + green + blue
     
         return (luminance > 0.6) ? .default : .lightContent;
+    }
+}
+
+extension TrackDetailsViewController : UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        //change alpha of elements depending on scroll position
+        
+        if scrollView.contentOffset.y < coverImageView.frame.height {
+            titleView.alpha = max(0, (-coverImageView.frame.height / 1.2 + scrollView.contentOffset.y) / coverImageView.frame.height * 4)
+            coverImageView.alpha = 1 - max(0, (-coverImageView.frame.height / 2 + scrollView.contentOffset.y) / coverImageView.frame.height * 2)
+        }
+        else {
+            titleView.alpha = 1
+            coverImageView.alpha = 0
+        }
+        
+        headerView.alpha = titleView.alpha
+        
+        titleLabel.alpha = coverImageView.alpha
+        artistLabel.alpha = coverImageView.alpha
     }
 }

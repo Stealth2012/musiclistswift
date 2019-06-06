@@ -262,7 +262,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="axi-4u-T09">
-                                    <rect key="frame" x="0.0" y="-0.33333333333333215" width="240" height="33.666666666666657"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="240" height="33"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZOF-MA-I8C">
                                             <rect key="frame" x="0.0" y="0.0" width="240" height="19.333333333333332"/>
@@ -271,7 +271,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6PK-rW-5QD">
-                                            <rect key="frame" x="0.0" y="19.333333333333332" width="240" height="14.333333333333332"/>
+                                            <rect key="frame" x="0.0" y="19.333333333333332" width="240" height="13.666666666666668"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <color key="textColor" red="0.93333333330000001" green="0.20784313730000001" blue="0.29411764709999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -281,7 +281,9 @@
                             </subviews>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="axi-4u-T09" secondAttribute="trailing" id="1wJ-u5-4BA"/>
+                                <constraint firstAttribute="bottom" secondItem="axi-4u-T09" secondAttribute="bottom" id="2Kd-Nc-ypf"/>
                                 <constraint firstItem="axi-4u-T09" firstAttribute="centerY" secondItem="wqF-ab-YTl" secondAttribute="centerY" id="Cox-Xq-VaN"/>
+                                <constraint firstItem="axi-4u-T09" firstAttribute="top" secondItem="wqF-ab-YTl" secondAttribute="top" id="Kcq-IN-o7P"/>
                                 <constraint firstItem="axi-4u-T09" firstAttribute="leading" secondItem="wqF-ab-YTl" secondAttribute="leading" id="w13-0p-b4T"/>
                             </constraints>
                         </view>
