@@ -17,6 +17,6 @@ extension UILabel {
             return
         }
         
-        self.attributedText = NSMutableAttributedString(string: text!, attributes: [NSKernAttributeName : kerning])
+        self.attributedText = NSMutableAttributedString(string: text!, attributes: [NSAttributedString.Key.kern : kerning])
     }
 }

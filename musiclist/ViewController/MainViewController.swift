@@ -13,17 +13,17 @@ import CoreData
 class MainViewController: UITableViewController {
     
     var managedObjectContext: NSManagedObjectContext!
-    var fetchedResultsController: NSFetchedResultsController?
+    var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //preparing Core Data stuff
         
-        managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).managedObjectContext
         
-        let fetchRequest = NSFetchRequest()
-        let entityDescription = NSEntityDescription.entityForName("Track", inManagedObjectContext: self.managedObjectContext)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+        let entityDescription = NSEntityDescription.entity(forEntityName: "Track", in: self.managedObjectContext)
         
         //sorting by id
         let idSortDescriptor = NSSortDescriptor(key: "id", ascending: true)
@@ -44,24 +44,24 @@ class MainViewController: UITableViewController {
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "TrackSegue" {
             let cell = sender as! UITableViewCell
-            let track = fetchedResultsController?.objectAtIndexPath(self.tableView.indexPathForCell(cell)!) as! Track
-            let vc = segue.destinationViewController as! TrackDetailsViewController
+            let track = fetchedResultsController?.object(at: self.tableView.indexPath(for: cell)!) as! Track
+            let vc = segue.destination as! TrackDetailsViewController
             vc.track = track
         }
     }
     
     //MARK: UITableViewDataSource
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fetchedResultsController?.fetchedObjects?.count ?? 0
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("TrackCell", forIndexPath: indexPath) as! TrackCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as! TrackCell
         
-        let track = fetchedResultsController?.objectAtIndexPath(indexPath) as! Track
+        let track = fetchedResultsController?.object(at: indexPath) as! Track
         cell.track = track
 
         return cell

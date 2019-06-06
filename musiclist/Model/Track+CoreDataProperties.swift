@@ -22,7 +22,7 @@ extension Track {
 
     func getCoverImage() -> UIImage? {
         if let coverId = self.coverId {
-            return UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource(coverId, ofType: nil)!)
+            return UIImage(contentsOfFile: Bundle.main.path(forResource: coverId, ofType: nil)!)
         }
         
         return nil
