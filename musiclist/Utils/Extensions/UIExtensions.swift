@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 extension UILabel {
-    func setKerning(kerning: Double) {
+    func setKerning(_ kerning: Double) {
         let text = self.text
         if text == nil || text!.isEmpty
         {

@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import CoreData
-import ChameleonFramework
 
 class TrackDetailsViewController : UIViewController {
     @IBOutlet private weak var coverImageView: UIImageView!
@@ -47,7 +46,7 @@ class TrackDetailsViewController : UIViewController {
         titleLabel.text = track?.title
         artistLabel.text = track?.artist
         
-        overviewTitleLabel.setKerning(kerning: 1)
+        overviewTitleLabel.setKerning(1)
         
         if let path = Bundle.main.path(forResource: "description", ofType: "txt")
         {
@@ -61,11 +60,9 @@ class TrackDetailsViewController : UIViewController {
             }
         }
         
-        if let image = track?.getCoverImage() {
-            coverImageView.image = image
-            
-            applyTheme(image: image)
-        }
+        guard let image = track?.getCoverImage() else { return }
+
+        coverImageView.image = image
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -95,63 +92,6 @@ class TrackDetailsViewController : UIViewController {
         titleView.alpha = 0
         
         headerView.alpha = 0
-    }
-    
-    private func applyTheme(image: UIImage) {
-        let colors = ColorsFromImage(image, withFlatScheme: true)
-        guard colors.count > 1 else { return }
-        
-        var bgColor = colors[0]
-        var fgColor = colors[1]
-        
-        let statusBarStyle = contrastingStatusBarStyleForColor(backgroundColor: bgColor)
-        
-        //color correction (depending on light or dark content)
-        if statusBarStyle == .lightContent {
-            bgColor = bgColor.darken(byPercentage: 0.25) ?? .white
-            fgColor = fgColor.lighten(byPercentage: 0.85) ?? .black
-        }
-        else {
-            bgColor = bgColor.lighten(byPercentage: 0.25) ?? .black
-            fgColor = fgColor.darken(byPercentage: 0.85) ?? .white
-        }
-        
-        view.backgroundColor = bgColor
-        headerView.backgroundColor = bgColor
-        descriptionLabel.textColor = fgColor
-        
-        navbarTitleLabel.textColor = fgColor
-        navbarArtistLabel.textColor = fgColor
-        
-        titleLabel.textColor = fgColor
-        artistLabel.textColor = fgColor
-        
-        overviewTitleLabel.textColor = fgColor
-        
-        navigationController?.navigationBar.tintColor = fgColor
-        
-        self.statusBarStyle = statusBarStyle
-    }
-
-    //private func taken from ChameleonFramework
-    private func contrastingStatusBarStyleForColor(backgroundColor: UIColor) -> UIStatusBarStyle {
-    
-        //Calculate Luminance
-        var luminance: CGFloat
-        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0
-    
-        //Check for clear or uncalculatable color and assume white
-        if !backgroundColor.getRed(&red, green: &green, blue: &blue, alpha: nil) {
-            return .default
-        }
-    
-        //Relative luminance in colorimetric spaces - http://en.wikipedia.org/wiki/Luminance_(relative)
-        red *= 0.2126
-        green *= 0.7152
-        blue *= 0.0722
-        luminance = red + green + blue
-    
-        return (luminance > 0.6) ? .default : .lightContent;
     }
 }
 
