@@ -8,10 +8,14 @@
 
 import Foundation
 import CoreData
-
+import SwiftUI
 
 class Track: NSManagedObject {
 
 // Insert code here to add functionality to your managed object subclass
 
+}
+
+extension Track: Identifiable {
+    
 }

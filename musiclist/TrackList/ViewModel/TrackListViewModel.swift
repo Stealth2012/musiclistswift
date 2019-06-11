@@ -7,13 +7,17 @@
 //
 
 import Foundation
+import SwiftUI
+import Combine
 
-class TrackListViewModel {
+final class TrackListViewModel : BindableObject {
     private let tracksDataStore: TracksDataStore
+    
+    let didChange = PassthroughSubject<TrackListViewModel, Never>()
     
     var tracks: [Track] = [] {
         didSet {
-            tracksUpdated?()
+            didChange.send(self)
         }
     }
     
@@ -21,6 +25,8 @@ class TrackListViewModel {
     
     init(dataStore: TracksDataStore) {
         self.tracksDataStore = dataStore
+        
+        load()
     }
     
     func load() {
