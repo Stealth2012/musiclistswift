@@ -15,7 +15,7 @@ struct TrackListView : View {
         return NavigationView {
             List {
                 ForEach(viewModel.tracks) { track in
-                    NavigationButton(destination: TrackDetailsView()) {
+                    NavigationButton(destination: TrackDetailsView(track: track)) {
                         TrackItemView(track: track)
                     }
                 }

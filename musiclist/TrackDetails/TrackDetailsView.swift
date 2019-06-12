@@ -9,8 +9,31 @@
 import SwiftUI
 
 struct TrackDetailsView : View {
+    let viewModel: TrackDetailsViewModel
+    
+    init(track: Track) {
+        self.viewModel = TrackDetailsViewModel(track: track)
+    }
+    
     var body: some View {
-        Text("Hello World!")
+        GeometryReader { geometry in
+            ScrollView {
+                VStack (alignment: .leading) {
+                    TrackHeaderView(track: self.viewModel.track)
+                    Spacer(minLength: 20)
+                    
+                    Text("OVERVIEW")
+                        .font(.headline)
+                    Spacer(minLength: 10)
+                    
+                    Text(self.viewModel.description ?? "")
+                        .lineLimit(nil)
+                }
+                .padding(20)
+                // Workaround to fix sizing issues of ScrollView in Beta 1
+                .frame(width: geometry.size.width, height: geometry.size.height)
+            }
+        }.navigationBarTitle(Text("Details"), displayMode: .inline)
     }
 }
 
